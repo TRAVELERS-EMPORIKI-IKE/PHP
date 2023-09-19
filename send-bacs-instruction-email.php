@@ -22,447 +22,370 @@ function send_bacs_payment_email($order_id) {
     
     // Set the email subject and message based on the order language
     switch($lang) {
-		case 'bg':
-            $subject = 'Инструкции за плащане на BACS за поръчка #' . $order->get_id();
-             $message = 'Уважаеми' . $order->get_billing_first_name() . ",
-
-Благодарим ви за вашата поръчка с обща сума " . wc_price($order_total) . ". Моля, следвайте инструкциите по-долу, за да завършите плащането си чрез BACS:
-
-1. Влезте в акаунта си за онлайн банкиране.
-2. Направете плащане по следната банкова сметка:
-
-Име на фирмата: $company_name
-Номер на сметката: $account_number
-Код на сортиране: $sort_code
-
-Моля, включете номера на вашата поръчка в раздела за справка.
-
-След като получим вашето плащане, ние ще обработим вашата поръчка и ще ви изпратим имейл за потвърждение на доставката.
-
-Благодаря ви за вашата поръчка.
-****МОЛЯ, ОБЪРНЕТЕ ВНИМАНИЕ, че ПЛАЩАНЕТО ТРЯБВА ДА СЕ ПОЯВИ В НАШАТА ФИРМЕНА СМЕТКА С ТОЧНАТА СУМА НА ВАШАТА ПОРЪЧКА, ВСИЧКИ БАНКОВИ ТАКСИ ТРЯБВА ДА БЪДАТ ПОКРИТИ ОТ ВАС****";
-            break;
-		case 'hr':
-            $subject = 'BACS upute za plaćanje za narudžbu #' . $order->get_id();
-            $message = 'Dragi' . $order->get_billing_first_name() . ",
-
-Zahvaljujemo na vašoj narudžbi s ukupnim iznosom " . wc_price($order_total) . ". Slijedite upute u nastavku kako biste dovršili plaćanje koristeći BACS:
-
-1. Prijavite se na svoj račun za internet bankarstvo.
-2. Izvršite uplatu na sljedeći bankovni račun:
-
-Naziv tvrtke: $company_name
-Broj računa: $account_number
-Šifra sortiranja: $sort_code
-
-Uključite svoj broj narudžbe u odjeljak s referencama.
-
-Nakon što primimo vašu uplatu, obradit ćemo vašu narudžbu i poslati vam e-poruku s potvrdom dostave.
-
-Hvala na Vašoj Narudžbi.
-****MOLIMO IMAJTE NA VAŠU PLAĆANJE SE MORA POJAVITI NA RAČUNU NAŠE TVRTKE S TOČNIM IZNOSOM VAŠE NARUDŽBE, SVE BANKOVNE TROŠKOVE MORATE POKRITI VI****";
-            break;
-		case 'cs':
-            $subject = 'Pokyny k platbě BACS pro objednávku #' . $order->get_id();
-             $message = 'Vážený ' . $order->get_billing_first_name() . ",
-
-Děkujeme za vaši objednávku v celkové výši " . wc_price($order_total) .". Pro dokončení platby pomocí BACS postupujte podle následujících pokynů:
-
-1. Přihlaste se ke svému účtu online bankovnictví.
-2. Proveďte platbu na následující bankovní účet:
-
-Název společnosti: $company_name
-Číslo účtu: $account_number
-Třídicí kód: $sort_code
-
-Do sekce reference uveďte číslo vaší objednávky.
-
-Jakmile obdržíme vaši platbu, zpracujeme vaši objednávku a zašleme vám e-mail s potvrzením odeslání.
-
-Děkujeme za Vaši objednávku.
-****UPOZORŇUJEME, ŽE NA ÚČTU NAŠE FIRMY SE MUSÍ ZOBRAZIT PLATBA S PŘESNOU ČÁSTKOU VAŠÍ OBJEDNÁVKY, VŠECHNY BANKOVNÍ POPLATKY MUSÍTE HRADIT VY****";
-            break;
-        case 'en':
-                $subject = 'BACS payment instructions for order #' . $order->get_id();
-                $message = 'Dear ' . $order->get_billing_first_name() . ",
-    
-    Thank you for your order with a total of " . wc_price($order_total) . ". Please follow the instructions below to complete your payment using BACS:
-    
-    1. Log in to your online banking account.
-    2. Make a payment to the following bank account:
-    
-    Company Name: $company_name
-    Account Number: $account_number
-    Sort Code: $sort_code
-    
-    Please include your order number in the reference section.
-    
-    Once we have received your payment, we will process your order and send you a shipping confirmation email.
-    
-    Thank you for your order.
-    ****PLEASE NOTE PAYMENT MUST APPEAR ON OUR COMPANY ACCOUNT WITH THE EXACT AMOUNT OF YOUR ORDER, ANY BANK CHARGES MUST BE COVERED BY YOU****";
-		break;
-    case 'et':
-        $subject = 'BACS-i maksejuhised tellimuse # jaoks' . $order->hangi_id();
-        $message = 'Kallis' . $order->hangi_arvelduse_eesnimi() . ",
-
-Täname teid tellimuse eest kogusummaga " . wc_price($order_total) . ". BACS-i abil makse sooritamiseks järgige allolevaid juhiseid.
-
-1. Logige sisse oma internetipanga kontole.
-2. Tehke makse järgmisele pangakontole:
-
-Ettevõtte nimi: $company_name
-Kontonumber: $account_number
-Sortimiskood: $sort_code
-
-Palun lisage viiteosale oma tellimuse number.
-
-Kui oleme teie makse kätte saanud, töötleme teie tellimust ja saadame teile kohaletoimetamise kinnitusmeili.
-
-Täname tellimuse eest.
-****PANGE TÄHELEPANU, ET MAKSE PEAB ILMA MEIE ETTEVÕTTE KONTOLE KOOS TEIE TELLIMUSE TÄPSEMA SUMMAGA, KÕIK PANGATASU PEATE KATTAMA TEIE****";
-     break;
-    case 'fi':
-        $subject = 'BACS-maksuohjeet tilaukselle #' . $order->get_id();
-        $message = 'Hyvä ' . $order->get_billing_first_name() . ",
-
-Kiitos tilauksestasi yhteensä " . wc_price($order_total) . ". Seuraa alla olevia ohjeita suorittaaksesi maksun BACS: n avulla:
-
-1. Kirjaudu sisään verkkopankkitilillesi.
-2. Tee maksu seuraavalle pankkitilille:
-
-Yrityksen nimi: $company_name
-Tilinumero: $account_number
-Lajittelukoodi: $sort_code
-
-Sisällytä tilausnumerosi viiteosioon.
-
-Kun olemme vastaanottaneet maksun, käsittelemme tilauksesi ja lähetämme sinulle toimitusvahvistuksen sähköpostitse.
-
-Kiitos tilauksestasi.
-****HUOMAA, ETTÄ MAKSU ON NÄYTETTÄVÄ YRITYKSEMME TILILLÄ TARKALLA SUMMALLA TILAUKSESTASI, KAIKKI PANKKIMAKSUT ON KATETTAVA SINULLE****";
+	case 'el':
+        $subject = 'Οδηγίες πληρωμής BACS για παραγγελία #' . $order->get_id();
+        $message = '<strong>Αγαπητέ ' . $order->get_billing_first_name() . ',</strong><br><br>';
+        $message .= 'Σας ευχαριστούμε για την παραγγελία σας συνολικού ποσού ' . wc_price($order_total) . '.<br>';
+        $message .= 'Ακολουθήστε τις παρακάτω οδηγίες για να ολοκληρώσετε την πληρωμή σας χρησιμοποιώντας το BACS:<br><br>';
+        $message .= '<ol>';
+        $message .= '<li>Συνδεθείτε στο λογαριασμό σας στην τραπεζική σας τράπεζα.</li>';
+        $message .= '<li>Κάντε μια πληρωμή στον ακόλουθο τραπεζικό λογαριασμό:</li>';
+        $message .= '</ol>';
+        $message .= '<strong>Όνομα εταιρείας:</strong> TRAVELERS EMPORIKI IKE<br>';
+        $message .= '<strong>Αριθμός λογαριασμού:</strong> GR24 0172 1450 0051 4509 2301 393<br>';
+        $message .= '<strong>Κωδικός ταξινόμησης:</strong> PIRBGRAA<br><br>';
+        $message .= 'Παρακαλούμε συμπεριλάβετε τον αριθμό παραγγελίας σας στην ενότητα αναφοράς.<br>';
+        $message .= 'Μόλις λάβουμε την πληρωμή σας, θα επεξεργαστούμε την παραγγελία σας και θα σας στείλουμε ένα email επιβεβαίωσης αποστολής.<br><br>';
+        $message .= '<strong>****ΠΑΡΑΚΑΛΩ ΣΗΜΕΙΩΣΤΕ ΟΤΙ Η ΠΛΗΡΩΜΗ ΠΡΕΠΕΙ ΝΑ ΕΜΦΑΝΙΣΤΕΙ ΣΤΟΝ ΛΟΓΑΡΙΑΣΜΟ ΤΗΣ ΕΤΑΙΡΕΙΑΣ ΜΑΣ ΜΕ ΤΟ ΑΚΡΙΒΕΣ ΠΟΣΟ ΤΗΣ ΠΑΡΑΓΓΕΛΙΑΣ ΣΑΣ, ΟΠΟΙΕΣ ΤΡΑΠΕΖΙΚΕΣ ΧΡΕΩΣΕΙΣ ΠΡΕΠΕΙ ΝΑ ΚΑΛΥΦΘΟΥΝ ΑΠΟ ΕΣΑΣ****</strong>';
+    break;
+    case 'de':
+        $subject = 'BACS-Zahlungsanweisungen für Bestellung #' . $order->get_id();
+        $message = 'Sehr geehrte ' . $order->get_billing_first_name() . ",
+        $message .= 'Vielen Dank für Ihre Bestellung in Höhe von ' . wc_price($order_total) . '. Bitte befolgen Sie die folgenden Anweisungen, um Ihre Zahlung mit BACS abzuschließen:<br><br>';
+        $message .= '<ol>';
+        $message .= '<li>Melden Sie sich bei Ihrem Online-Banking-Konto an.</li>';
+        $message .= '<li>Tätigen Sie eine Zahlung auf das folgende Bankkonto:</li>';
+        $message .= '</ol>';
+        $message .= '<strong>Firmenname:</strong> TRAVELERS EMPORIKI IKE<br>';
+        $message .= '<strong>Kontonummer:</strong> GR24 0172 1450 0051 4509 2301 393<br>';
+        $message .= '<strong>Sort Code:</strong> PIRBGRAA<br><br>';
+        $message .= 'Bitte geben Sie Ihre Bestellnummer im Referenzbereich an.<br>';
+        $message .= 'Sobald wir Ihre Zahlung erhalten haben, werden wir Ihre Bestellung bearbeiten und Ihnen eine Versandbestätigungs-E-Mail senden.<br><br>';
+        $message .= '<strong>****BITTE BEACHTEN SIE, DASS DIE ZAHLUNG AUF UNSEREM FIRMENKONTO MIT DEM EXAKTEN BETRAG IHRER BESTELLUNG ERSCHIENEN SEIN MUSS, ALLE BANKGEBÜHREN MÜSSEN VON IHNEN ABGEDECKT WERDEN****</strong>';
     break;
     case 'fr':
         $subject = 'Instructions de paiement BACS pour la commande #' . $order->get_id();
         $message = 'Cher ' . $order->get_billing_first_name() . ",
-
-Merci pour votre commande d'un montant total de " . wc_price($order_total) . ". Veuillez suivre les instructions ci-dessous pour effectuer votre paiement en utilisant BACS:
-
-1. Connectez-vous à votre compte bancaire en ligne.
-2. Effectuez un paiement sur le compte bancaire suivant:
-
-Nom de la société: $company_name
-Numéro de compte: $account_number
-Code de tri: $sort_code
-
-Veuillez inclure votre numéro de commande dans la section référence.
-
-Une fois que nous aurons reçu votre paiement, nous traiterons votre commande et vous enverrons un e-mail de confirmation d'expédition.
-
-Merci pour votre commande.
-****VEUILLEZ NOTER QUE LE PAIEMENT DOIT APPARAÎTRE SUR NOTRE COMPTE D'ENTREPRISE AVEC LE MONTANT EXACT DE VOTRE COMMANDE, TOUTES LES FRAIS BANCAIRES DOIVENT ÊTRE COUVERTES PAR VOUS****";
-    break;
-    case 'de':
-        $subject = 'BACS-Zahlungsanweisungen für Bestellung #' . $order->get_id();
-        $message = 'Lieber ' . $order->get_billing_first_name() . ",
-
-Vielen Dank für Ihre Bestellung in Höhe von " . wc_price($order_total) . ". Bitte befolgen Sie die folgenden Anweisungen, um Ihre Zahlung mit BACS abzuschließen:
-
-1. Melden Sie sich bei Ihrem Online-Banking-Konto an.
-2. Tätigen Sie eine Zahlung auf das folgende Bankkonto:
-
-Firmenname: $company_name
-Kontonummer: $account_number
-Sortiercode: $sort_code
-
-Bitte geben Sie Ihre Bestellnummer im Referenzbereich an.
-
-Sobald wir Ihre Zahlung erhalten haben, werden wir Ihre Bestellung bearbeiten und Ihnen eine Versandbestätigungs-E-Mail senden.
-
-Vielen Dank für Ihre Bestellung.
-****BITTE BEACHTEN SIE, DASS DIE ZAHLUNG MIT DEM EXAKTEN BETRAG IHRER BESTELLUNG AUF UNSEREM FIRMENKONTO ERFOLGEN MUSS, ALLE BANKGEBÜHREN MÜSSEN VON IHNEN GETRAGEN WERDEN****";
-    break;
-    case 'el':
-        $subject = 'Οδηγίες πληρωμής BACS για παραγγελία #' . $order->get_id();
-        $message = 'Αγαπητέ ' . $order->get_billing_first_name() . ",
-
-Σας ευχαριστούμε για την παραγγελία σας συνολικού ποσού " . wc_price($order_total) . ". Ακολουθήστε τις παρακάτω οδηγίες για να ολοκληρώσετε την πληρωμή σας χρησιμοποιώντας το BACS:
-
-1. Συνδεθείτε στο λογαριασμό σας στην τραπεζική σας τράπεζα.
-2. Κάντε μια πληρωμή στον ακόλουθο τραπεζικό λογαριασμό:
-
-Όνομα εταιρείας: $company_name
-Αριθμός λογαριασμού: $account_number
-Κωδικός ταξινόμησης: $sort_code
-
-Παρακαλούμε συμπεριλάβετε τον αριθμό παραγγελίας σας στην ενότητα αναφοράς.
-
-Μόλις λάβουμε την πληρωμή σας, θα επεξεργαστούμε την παραγγελία σας και θα σας στείλουμε ένα email επιβεβαίωσης αποστολής.
-
-Σας ευχαριστούμε για την παραγγελία σας.
-****ΠΑΡΑΚΑΛΩ ΣΗΜΕΙΩΣΤΕ ΟΤΙ Η ΠΛΗΡΩΜΗ ΠΡΕΠΕΙ ΝΑ ΕΜΦΑΝΙΣΤΕΙ ΣΤΟΝ ΛΟΓΑΡΙΑΣΜΟ ΤΗΣ ΕΤΑΙΡΕΙΑΣ ΜΑΣ ΜΕ ΤΟ ΑΚΡΙΒΕΣ ΠΟΣΟ ΤΗΣ ΠΑΡΑΓΓΕΛΙΑΣ ΣΑΣ, ΟΠΟΙΕΣ ΤΡΑΠΕΖΙΚΕΣ ΧΡΕΩΣΕΙΣ ΠΡΕΠΕΙ ΝΑ ΚΑΛΥΦΘΟΥΝ ΑΠΟ ΕΣΑΣ****";
-    break;
-    case 'hu':
-        $subject = 'BACS fizetési utasítások a(z) #' . $order->get_id() . ' rendeléshez';
-        $message = 'Kedves ' . $order->get_billing_first_name() . ",
-
-Köszönjük megrendelését, amelynek összege " . wc_price($order_total) . ". Kérjük, kövesse az alábbi utasításokat a fizetés befejezéséhez a BACS használatával:
-
-1. Jelentkezzen be az online banki fiókjába.
-2. Fizessen a következő bankszámlára:
-
-Cégnév: $company_name
-Számlaszám: $account_number
-Rendezési kód: $sort_code
-
-Kérjük, adja meg rendelési számát a hivatkozások részben.
-
-Miután megkaptuk a fizetését, feldolgozzuk a rendelését, és e-mailben elküldjük Önnek a szállítási visszaigazolást.
-
-Köszönjük a rendelését.
-****KÉRJÜK, VEGYE FIGYELEMBE, HOGY A FIZETÉSNEK MEGJELENNIE KELL A CÉG SZÁMLÁJÁN A RENDELÉS PONTOS ÖSSZEGÉVEL, A BANKI DÍJAKAT ÖNNEK KELL FEDNI****";
+        $message .= 'Merci pour votre commande d\'un montant total de ' . wc_price($order_total) . '. Veuillez suivre les instructions ci-dessous pour effectuer votre paiement en utilisant BACS:<br><br>';
+        $message .= '<ol>';
+        $message .= '<li>Connectez-vous à votre compte bancaire en ligne.</li>';
+        $message .= '<li>Effectuez un paiement sur le compte bancaire suivant:</li>';
+        $message .= '</ol>';
+        $message .= '<strong>Nom de la société:</strong> TRAVELERS EMPORIKI IKE<br>';
+        $message .= '<strong>Numéro de compte:</strong> GR24 0172 1450 0051 4509 2301 393<br>';
+        $message .= '<strong>Code de tri:</strong> PIRBGRAA<br><br>';
+        $message .= 'Veuillez inclure votre numéro de commande dans la section référence.<br>';
+        $message .= 'Une fois que nous aurons reçu votre paiement, nous traiterons votre commande et vous enverrons un e-mail de confirmation d\'expédition.<br><br>';
+        $message .= '<strong>****VEUILLEZ NOTER QUE LE PAIEMENT DOIT APPARAÎTRE SUR NOTRE COMPTE D\'ENTREPRISE AVEC LE MONTANT EXACT DE VOTRE COMMANDE, TOUTES LES FRAIS BANCAIRES DOIVENT ÊTRE COUVERTES PAR VOUS****</strong>';
     break;
     case 'it':
         $subject = 'Istruzioni per il pagamento BACS per l\'ordine #' . $order->get_id();
-        $message = 'Caro ' . $order->get_billing_first_name() . ",
-
-Grazie per il tuo ordine per un totale di " . wc_price($order_total) . ". Segui le istruzioni di seguito per completare il pagamento utilizzando BACS:
-
-1. Accedi al tuo account bancario online.
-2. Effettua un pagamento sul seguente conto bancario:
-
-Nome azienda: $company_name
-Numero di conto: $account_number
-Codice di ordinamento: $sort_code
-
-Includi il numero del tuo ordine nella sezione riferimento.
-
-Una volta ricevuto il pagamento, elaboreremo il tuo ordine e ti invieremo una e-mail di conferma della spedizione.
-
-Grazie per il tuo ordine.
-****NOTA BENE CHE IL PAGAMENTO DEVE APPARIRE SUL NOSTRO CONTO AZIENDALE CON L'IMPORTO ESATTO DEL TUO ORDINE, EVENTUALI SPESE BANCARIE DEVONO ESSERE COPIATE DA TE****";
+        $message = 'Gentile ' . $order->get_billing_first_name() . ",
+        $message .= 'Grazie per il tuo ordine di un totale di ' . wc_price($order_total) . '. Seguire le istruzioni di seguito per completare il pagamento utilizzando BACS:<br><br>';
+        $message .= '<ol>';
+        $message .= '<li>Accedi al tuo account bancario online.</li>';
+        $message .= '<li>Esegui un pagamento sul seguente conto bancario:</li>';
+        $message .= '</ol>';
+        $message .= '<strong>Nome azienda:</strong> TRAVELERS EMPORIKI IKE<br>';
+        $message .= '<strong>Numero di conto:</strong> GR24 0172 1450 0051 4509 2301 393<br>';
+        $message .= '<strong>Sort Code:</strong> PIRBGRAA<br><br>';
+        $message .= 'Includere il numero d\'ordine nella sezione riferimento.<br>';
+        $message .= 'Una volta ricevuto il pagamento, elaboreremo il tuo ordine e ti invieremo una e-mail di conferma di spedizione.<br><br>';
+        $message .= '<strong>****SI PREGA DI NOTARE CHE IL PAGAMENTO DEVE APPARIRE SUL NOSTRO CONTO AZIENDALE CON L\'IMPORTO ESATTO DEL TUO ORDINE, TUTTE LE SPESE BANCARIE DEVONO ESSERE COPIATE DA TE****</strong>';
     break;
-    case 'lv':
-        $subject = 'BACS maksājuma instrukcijas pasūtījumam #' . $order->get_id();
-        $message = 'Dārgais ' . $order->get_billing_first_name() . ",
-
-Paldies par jūsu pasūtījumu ar kopējo summu " . wc_price($order_total) . ". Lai pabeigtu maksājumu, izmantojot BACS, ievērojiet zemāk norādītās instrukcijas:
-
-1. Piesakieties savā tiešsaistes bankas kontā.
-2. Veiciet maksājumu uz sekojošo bankas kontu:
-
-Uzņēmuma nosaukums: $company_name
-Konta numurs: $account_number
-Kārtošanas kods: $sort_code
-
-Lūdzu, iekļaujiet savu pasūtījuma numuru atsauce sadaļā.
-
-Saņemot jūsu maksājumu, mēs apstrādāsim jūsu pasūtījumu un nosūtīsim jums paziņojumu par piegādi.
-
-Paldies par jūsu pasūtījumu.
-****LŪDZU, PIEVĒRSIET UZMANĪBU, KA MAKSĀJUMAM JĀPARĀDĀS MŪSU UZŅĒMUMA KONTĀ AR JŪSU PASŪTĪJUMA PAREIZO SUMMU, JEBKURAS BANKAS MAKSAS JĀSEDZ JŪS****";
-    break;
-    case 'lt':
-        $subject = 'BACS mokėjimo instrukcijos užsakymui #' . $order->get_id();
-        $message = 'Brangus ' . $order->get_billing_first_name() . ",
-
-Dėkojame už jūsų užsakymą, kurio bendra suma " . wc_price($order_total) . ". Norėdami užbaigti mokėjimą naudodami BACS, laikykitės žemiau pateiktų instrukcijų:
-
-1. Prisijunkite prie savo internetinės bankininkystės sąskaitos.
-2. Atlikite mokėjimą į šią banko sąskaitą:
-
-Įmonės pavadinimas: $company_name
-Sąskaitos numeris: $account_number
-Rūšiavimo kodas: $sort_code
-
-Prašome įtraukti savo užsakymo numerį nuorodos skyriuje.
-
-Gavę jūsų mokėjimą, mes apdorosime jūsų užsakymą ir išsiųsime jums pristatymo patvirtinimo el. Laišką.
-
-Dėkojame už jūsų užsakymą.
-****PASTABA, KAD MOKĖJIMAS TURI PASIRODYTI MŪSŲ ĮMONĖS SĄSKAITOJE SU JŪSŲ UŽSAKYMO TIKSLIU KIEKIU, BET KOKIŲ BANKO MOKESČIŲ TURI BŪTI PADENGTA JUMS****";
+    case 'es':
+        $subject = 'Instrucciones de pago de BACS para el pedido #' . $order->get_id();
+        $message = 'Estimado ' . $order->get_billing_first_name() . ",
+        $message .= 'Gracias por su pedido por un total de ' . wc_price($order_total) . '. Siga las instrucciones a continuación para completar su pago utilizando BACS:<br><br>';
+        $message .= '<ol>';
+        $message .= '<li>Inicie sesión en su cuenta bancaria en línea.</li>';
+        $message .= '<li>Haga un pago a la siguiente cuenta bancaria:</li>';
+        $message .= '</ol>';
+        $message .= '<strong>Nombre de la empresa:</strong> TRAVELERS EMPORIKI IKE<br>';
+        $message .= '<strong>Número de cuenta:</strong> GR24 0172 1450 0051 4509 2301 393<br>';
+        $message .= '<strong>Código de clasificación:</strong> PIRBGRAA<br><br>';
+        $message .= 'Incluya su número de pedido en la sección de referencia.<br>';
+        $message .= 'Una vez que hayamos recibido su pago, procesaremos su pedido y le enviaremos un correo electrónico de confirmación de envío.<br><br>';
+        $message .= '<strong>****TENGA EN CUENTA QUE EL PAGO DEBE APARECER EN NUESTRA CUENTA DE EMPRESA CON LA CANTIDAD EXACTA DE SU PEDIDO, TODOS LOS CARGOS BANCARIOS DEBEN SER CUBIERTOS POR USTED****</strong>';
     break;
     case 'pt-pt':
         $subject = 'Instruções de pagamento BACS para o pedido #' . $order->get_id();
         $message = 'Caro ' . $order->get_billing_first_name() . ",
-
-Obrigado pelo seu pedido com um total de " . wc_price($order_total) . ". Siga as instruções abaixo para concluir o pagamento usando BACS:
-
-1. Faça login na sua conta bancária online.
-2. Faça um pagamento para a seguinte conta bancária:
-
-Nome da empresa: $company_name
-Número da conta: $account_number
-Código de classificação: $sort_code
-
-Inclua o número do seu pedido na seção de referência.
-
-Assim que recebermos seu pagamento, processaremos seu pedido e enviaremos um e-mail de confirmação de envio.
-
-Obrigado pelo seu pedido.
-****OBSERVE QUE O PAGAMENTO DEVE APARECER NA CONTA DA NOSSA EMPRESA COM O VALOR EXATO DO SEU PEDIDO, QUALQUER TAXA BANCÁRIA DEVE SER COBERTA POR VOCÊ****";
+        $message .= 'Obrigado pelo seu pedido no valor de ' . wc_price($order_total) . '. Siga as instruções abaixo para concluir seu pagamento usando BACS:<br><br>';
+        $message .= '<ol>';
+        $message .= '<li>Entre na sua conta bancária online.</li>';
+        $message .= '<li>Faça um pagamento na seguinte conta bancária:</li>';
+        $message .= '</ol>';
+        $message .= '<strong>Nome da empresa:</strong> TRAVELERS EMPORIKI IKE<br>';
+        $message .= '<strong>Número da conta:</strong> GR24 0172 1450 0051 4509 2301 393<br>';
+        $message .= '<strong>Código de classificação:</strong> PIRBGRAA<br><br>';
+        $message .= 'Inclua o número do seu pedido na seção de referência.<br>';
+        $message .= 'Assim que recebermos seu pagamento, processaremos seu pedido e enviaremos um e-mail de confirmação de envio.<br><br>';
+        $message .= '<strong>****POR FAVOR, NOTE QUE O PAGAMENTO DEVE APARECER NA NOSSA CONTA EMPRESARIAL COM O VALOR EXATO DO SEU PEDIDO, TODAS AS TAXAS BANCÁRIAS DEVEM SER COBERTAS POR VOCÊ****</strong>';
     break;
-    case 'pl':
-        $subject = 'Instrukcje płatności BACS dla zamówienia #' . $order->get_id();
-        $message = 'Drogi ' . $order->get_billing_first_name() . ",
-
-Dziękujemy za zamówienie na łączną kwotę " . wc_price($order_total) . ". Prosimy postępuj zgodnie z poniższymi instrukcjami, aby zakończyć płatność za pomocą BACS:
-
-1. Zaloguj się do swojego konta bankowego online.
-2. Dokonaj płatności na następujące konto bankowe:
-
-Nazwa firmy: $company_name
-Numer konta: $account_number
-Kod sortowania: $sort_code
-
-Proszę umieścić numer zamówienia w sekcji odniesienia.
-
-Po otrzymaniu płatności przetworzymy Twoje zamówienie i wyślemy Ci e-mail z potwierdzeniem wysyłki.
-
-Dziękujemy za zamówienie.
-****PAMIĘTAJ, ŻE PŁATNOŚĆ MUSI ZOSTAĆ NA KONCIE FIRMOWYM DOKŁADNIE KWOTĄ TWOJEGO ZAMÓWIENIA. WSZELKIE OPŁATY BANKOWE MUSISZ BYĆ POKRYTE PRZEZ CIEBIE****";
+    case 'pt':
+        $subject = 'Instruções de pagamento BACS para o pedido #' . $order->get_id();
+        $message = 'Caro ' . $order->get_billing_first_name() . ",
+        $message .= 'Obrigado pelo seu pedido no valor de ' . wc_price($order_total) . '. Siga as instruções abaixo para concluir seu pagamento usando BACS:<br><br>';
+        $message .= '<ol>';
+        $message .= '<li>Entre na sua conta bancária online.</li>';
+        $message .= '<li>Faça um pagamento na seguinte conta bancária:</li>';
+        $message .= '</ol>';
+        $message .= '<strong>Nome da empresa:</strong> TRAVELERS EMPORIKI IKE<br>';
+        $message .= '<strong>Número da conta:</strong> GR24 0172 1450 0051 4509 2301 393<br>';
+        $message .= '<strong>Código de classificação:</strong> PIRBGRAA<br><br>';
+        $message .= 'Inclua o número do seu pedido na seção de referência.<br>';
+        $message .= 'Assim que recebermos seu pagamento, processaremos seu pedido e enviaremos um e-mail de confirmação de envio.<br><br>';
+        $message .= '<strong>****POR FAVOR, NOTE QUE O PAGAMENTO DEVE APARECER NA NOSSA CONTA EMPRESARIAL COM O VALOR EXATO DO SEU PEDIDO, TODAS AS TAXAS BANCÁRIAS DEVEM SER COBERTAS POR VOCÊ****</strong>';
     break;
-    case 'ga':
-        $subject = 'Treoracha íocaíochta BACS don ordú #' . $order->get_id();
-        $message = 'A chara ' . $order->get_billing_first_name() . ",
-
-Go raibh maith agat as do ordú le haghaidh iomlán " . wc_price($order_total) . ". Déan iarracht na treoracha thíos a leanúint chun do íocaíocht a chríochnú ag baint úsáide as BACS:
-
-1. Logáil isteach i do chuntas bainc ar líne.
-2. Déan íocaíocht ar an gcuntas bainc seo a leanas:
-
-Ainm an chuideachta: $company_name
-Uimhir cuntas: $account_number
-Cód socrúcháin: $sort_code
-
-Cuir do uimhir ordaithe san alt tagairt.
-
-Nuair a fhaigheann muid do íocaíocht, próiseálfaimid do ordú agus seolaimid r-phost deimhnithe seachadta chugat.
-
-Go raibh maith agat as do ordú.
-****NÓTAIGH GO GCAITHFIDH AN ÍOCAÍOCHT A BHEITH AR ÁR CUNTAS COMHLACHT LEIS AN LÍON TOCHTACH A BHEITH AG DO ORDÚ, CAITHFIDH GACH TÁILLÍ BAINC A BHEITH AGAT****";
+    case 'en':
+        $subject = 'BACS payment instructions for order #' . $order->get_id();
+        $message = 'Dear ' . $order->get_billing_first_name() . ",
+        $message .= 'Thank you for your order with a total of ' . wc_price($order_total) . '. Please follow the instructions below to complete your payment using BACS:<br><br>';
+        $message .= '<ol>';
+        $message .= '<li>Log in to your online banking account.</li>';
+        $message .= '<li>Make a payment to the following bank account:</li>';
+        $message .= '</ol>';
+        $message .= '<strong>Company Name:</strong> TRAVELERS EMPORIKI IKE<br>';
+        $message .= '<strong>Account Number:</strong> GR24 0172 1450 0051 4509 2301 393<br>';
+        $message .= '<strong>Sort Code:</strong> PIRBGRAA<br><br>';
+        $message .= 'Please include your order number in the reference section.<br>';
+        $message .= 'Once we have received your payment, we will process your order and send you a shipping confirmation email.<br><br>';
+        $message .= '<strong>****PLEASE NOTE PAYMENT MUST APPEAR ON OUR COMPANY ACCOUNT WITH THE EXACT AMOUNT OF YOUR ORDER, ANY BANK CHARGES MUST BE COVERED BY YOU****</strong>';
+    break;
+    case 'et':
+        $subject = 'BACS maksejuhised tellimuse #' . $order->get_id();
+        $message = 'Kallis ' . $order->get_billing_first_name() . ",
+        $message .= 'Täname teid tellimuse eest kogusummas ' . wc_price($order_total) . '. Järgige allpool toodud juhiseid BACS-i kasutades makse lõpuleviimiseks:<br><br>';
+        $message .= '<ol>';
+        $message .= '<li>Logige sisse oma pangakonto.</li>';
+        $message .= '<li>Tehke makse järgmisele pangakontole:</li>';
+        $message .= '</ol>';
+        $message .= '<strong>Ettevõtte nimi:</strong> TRAVELERS EMPORIKI IKE<br>';
+        $message .= '<strong>Kontonumber:</strong> GR24 0172 1450 0051 4509 2301 393<br>';
+        $message .= '<strong>Sorteerimiskood:</strong> PIRBGRAA<br><br>';
+        $message .= 'Palun sisestage tellimuse number viite jaotisse.<br>';
+        $message .= 'Kui oleme teie makse kätte saanud, töötleme teie tellimuse ja saadame teile e-kirja saatmise kinnituse.<br><br>';
+        $message .= '<strong>****PALUN MÄRKIGE, ET MAKSE PEAB ILMUMA MEIE ETTEVÕTTE KONTOLE TÄPSE SUMMAGA, MIS ON TEIE TELLIMUS, KÕIK PANGA TASUD PEAVAD OLEMA TEIE KATETUD****</strong>';
+    break;
+    case 'fi':
+        $subject = 'BACS-maksuohjeet tilaukselle #' . $order->get_id();
+        $message = 'Hyvä ' . $order->get_billing_first_name() . ",
+        $message .= 'Kiitos tilauksestasi yhteensä ' . wc_price($order_total) . '. Noudata alla olevia ohjeita suorittaaksesi maksun BACS: n avulla:<br><br>';
+        $message .= '<ol>';
+        $message .= '<li>Kirjaudu sisään verkkopankkitilillesi.</li>';
+        $message .= '<li>Suorita maksu seuraavalle pankkitilille:</li>';
+        $message .= '</ol>';
+        $message .= '<strong>Yrityksen nimi:</strong> TRAVELERS EMPORIKI IKE<br>';
+        $message .= '<strong>Tilinumero:</strong> GR24 0172 1450 0051 4509 2301 393<br>';
+        $message .= '<strong>Lajittelukoodi:</strong> PIRBGRAA<br><br>';
+        $message .= 'Sisällytä tilausnumerosi viiteosioon.<br>';
+        $message .= 'Kun olemme vastaanottaneet maksun, käsittelemme tilauksesi ja lähetämme sinulle toimitusvahvistuksen sähköpostitse.<br><br>';
+        $message .= '<strong>****HUOMAA, ETTÄ MAKSU ON NÄYTETTÄVÄ YRITYKSEMME TILILLÄ TARKALLA MÄÄRÄLLÄ TILAUKSESTASI, KAIKKI PANKKIMAKSUT ON KATETTAVA SINULLE****</strong>';
+    break;
+    case 'sv':
+        $subject = 'BACS-betalningsinstruktioner för beställning #' . $order->get_id();
+        $message = 'Kära ' . $order->get_billing_first_name() . ",
+        $message .= 'Tack för din beställning till ett totalt belopp av ' . wc_price($order_total) . '. Följ instruktionerna nedan för att slutföra din betalning med BACS:<br><br>';
+        $message .= '<ol>';
+        $message .= '<li>Logga in på ditt onlinebankkonto.</li>';
+        $message .= '<li>Gör en betalning till följande bankkonto:</li>';
+        $message .= '</ol>';
+        $message .= '<strong>Företagsnamn:</strong> TRAVELERS EMPORIKI IKE<br>';
+        $message .= '<strong>Kontonummer:</strong> GR24 0172 1450 0051 4509 2301 393<br>';
+        $message .= '<strong>Sorteringskod:</strong> PIRBGRAA<br><br>';
+        $message .= 'Ange ditt beställningsnummer i referensavsnittet.<br>';
+        $message .= 'När vi har mottagit din betalning kommer vi att behandla din beställning och skicka dig ett e-postmeddelande med bekräftelse på leverans.<br><br>';
+        $message .= '<strong>****OBS! BETALNINGEN MÅSTE VISAS PÅ VÅR FÖRETAGSKONTO MED EXAKT BELOPP AV DIN BESTÄLLNING, ALLA BANKKOSTNADER MÅSTE VARA TÄCKT AV DIG****</strong>';
+    break;
+    case 'bg':
+        $subject = 'Инструкции за плащане с BACS за поръчка #' . $order->get_id();
+        $message = 'Уважаеми ' . $order->get_billing_first_name() . ",
+        $message .= 'Благодарим ви за поръчката ви на обща стойност ' . wc_price($order_total) . '. Моля, следвайте инструкциите по-долу, за да завършите плащането си с BACS:<br><br>';
+        $message .= '<ol>';
+        $message .= '<li>Влезте в онлайн банковата си сметка.</li>';
+        $message .= '<li>Направете плащане на следната банкова сметка:</li>';
+        $message .= '</ol>';
+        $message .= '<strong>Име на компанията:</strong> TRAVELERS EMPORIKI IKE<br>';
+        $message .= '<strong>Номер на сметка:</strong> GR24 0172 1450 0051 4509 2301 393<br>';
+        $message .= '<strong>Код за сортиране:</strong> PIRBGRAA<br><br>';
+        $message .= 'Моля, включете номера на вашата поръчка в раздела за справка.<br>';
+        $message .= 'След като получим вашето плащане, ще обработим вашата поръчка и ще ви изпратим имейл за потвърждение на доставката.<br><br>';
+        $message .= '<strong>****МОЛЯ, ЗАБЕЛЕЖЕТЕ, ЧЕ ПЛАЩАНЕТО ТРЯБВА ДА СЕ ПОЯВИ НА НАШАТА СМЕТКА С ТОЧНА СУМА НА ВАШАТА ПОРЪЧКА, ВСИЧКИ БАНКОВИ ТАКСИ ТРЯБВА ДА БЪДАТ ПОКРИТИ ОТ ВАС****</strong>';
     break;
     case 'ro':
         $subject = 'Instrucțiuni de plată BACS pentru comanda #' . $order->get_id();
         $message = 'Dragă ' . $order->get_billing_first_name() . ",
-
-Vă mulțumim pentru comanda dvs. cu o sumă totală de " . wc_price($order_total) . ". Vă rugăm să urmați instrucțiunile de mai jos pentru a vă finaliza plata folosind BACS:
-
-1. Conectați-vă la contul dvs. bancar online.
-2. Efectuați o plată în contul bancar următor:
-
-Nume companie: $company_name
-Număr de cont: $account_number
-Cod de sortare: $sort_code
-
-Vă rugăm să includeți numărul comenzii dvs. în secțiunea de referință.
-
-Odată ce am primit plata dvs., vom procesa comanda dvs. și vă vom trimite un e-mail de confirmare a expedierii.
-
-Vă mulțumim pentru comanda dvs.
-****VĂ RUGĂM SĂ REȚINEȚI CĂ PLATA TREBUIE SĂ APARĂ PE CONTUL FIRMEI NOASTRE CU SUMA EXACTĂ A COMENZII DVS., ORICE TAXE BANCARE TREBUIE SĂ FIE ACOPERITE DE DVS.****";
+        $message .= 'Vă mulțumim pentru comanda dvs. în valoare totală de ' . wc_price($order_total) . '. Vă rugăm să urmați instrucțiunile de mai jos pentru a vă finaliza plata folosind BACS:<br><br>';
+        $message .= '<ol>';
+        $message .= '<li>Conectați-vă la contul dvs. bancar online.</li>';
+        $message .= '<li>Faceți o plată în contul bancar următor:</li>';
+        $message .= '</ol>';
+        $message .= '<strong>Numele companiei:</strong> TRAVELERS EMPORIKI IKE<br>';
+        $message .= '<strong>Număr de cont:</strong> GR24 0172 1450 0051 4509 2301 393<br>';
+        $message .= '<strong>Cod de sortare:</strong> PIRBGRAA<br><br>';
+        $message .= 'Vă rugăm să includeți numărul comenzii dvs. în secțiunea de referință.<br>';
+        $message .= 'Odată ce am primit plata dvs., vom procesa comanda dvs. și vă vom trimite un e-mail de confirmare a expedierii.<br><br>';
+        $message .= '<strong>****VĂ RUGĂM SĂ REȚINEȚI CĂ PLATA TREBUIE SĂ APARĂ PE CONTUL NOSTRU DE COMPANIE CU SUMA EXACTĂ A COMENZII DVS., ORICE TAXE BANCARE TREBUIE SĂ FIE ACOPERITE DE DVS.****</strong>';
     break;
-    case 'sk':
-        $subject = 'Pokyny k platbe BACS pre objednávku #' . $order->get_id();
-        $message = 'Vážený ' . $order->get_billing_first_name() . ",
-        
-Ďakujeme za vašu objednávku v celkovej výške " . wc_price($order_total) . ". Pre dokončenie platby pomocou BACS postupujte podľa nasledujúcich pokynov:
-
-1. Prihláste sa do svojho účtu online bankovníctva.
-2. Vykonajte platbu na nasledujúci bankový účet:
-
-Názov spoločnosti: $company_name
-Číslo účtu: $account_number
-Triediaci kód: $sort_code
-
-Do sekcie referencie uveďte číslo vašej objednávky.
-
-Po obdržaní vašej platby spracujeme vašu objednávku a zašleme vám e-mail s potvrdením o doručení.
-
-Ďakujeme za Vašu objednávku.
-****UPOZORNENIE, ŽE PLATBA MUSÍ BYŤ ZOBRAZENÁ NA ÚČTE NAŠEJ SPOLOČNOSTI S PRESNÝM MNOŽSTVOM VAŠEJ OBJEDNÁVKY, VŠETKY BANKOVÉ POPLATKY MUSIA BYŤ POKRYTÉ VAMI****";
+    case 'hr':
+        $subject = 'BACS upute za plaćanje za narudžbu #' . $order->get_id();
+        $message = 'Dragi ' . $order->get_billing_first_name() . ",
+        $message .= 'Hvala vam na narudžbi u iznosu od ' . wc_price($order_total) . '. Slijedite upute u nastavku kako biste dovršili svoju uplatu putem BACS-a:<br><br>';
+        $message .= '<ol>';
+        $message .= '<li>Prijavite se na svoj online bankovni račun.</li>';
+        $message .= '<li>Izvršite uplatu na sljedeći bankovni račun:</li>';
+        $message .= '</ol>';
+        $message .= '<strong>Naziv tvrtke:</strong> TRAVELERS EMPORIKI IKE<br>';
+        $message .= '<strong>Broj računa:</strong> GR24 0172 1450 0051 4509 2301 393<br>';
+        $message .= '<strong>Sort Code:</strong> PIRBGRAA<br><br>';
+        $message .= 'Uključite broj narudžbe u odjeljak za referencu.<br>';
+        $message .= 'Nakon što primimo vašu uplatu, obradit ćemo vašu narudžbu i poslat ćemo vam e-poštu s potvrdom o otpremi.<br><br>';
+        $message .= '<strong>****MOLIMO IMATI NA UMU DA SE PLAĆANJE MORA POJAVITI NA NAŠEM POSLOVNOM RAČUNU S TOČNIM IZNOSOM VAŠE NARUDŽBE, SVE BANKOVNE NAKNADE MORA BITI POKRIVENE OD STRANE VAS****</strong>';
     break;
     case 'sl':
         $subject = 'Navodila za plačilo BACS za naročilo #' . $order->get_id();
-        $message = 'Dragi ' . $order->get_billing_first_name() . ",
-
-Hvala za vaše naročilo v skupni višini " . wc_price($order_total) . ". Sledite spodnjim navodilom, da zaključite plačilo z uporabo BACS:
-
-1. Prijavite se v svoj spletni bančni račun.
-2. Izvedite plačilo na naslednji bančni račun:
-
-Ime podjetja: $company_name
-Številka računa: $account_number
-Koda za razvrščanje: $sort_code
-
-V razdelek sklic vključite številko naročila.
-
-Ko prejmemo vaše plačilo, bomo obdelali vaše naročilo in vam poslali e-poštno sporočilo o potrditvi pošiljanja.
-
-Hvala za vaše naročilo.
-****OPOMBA, DA SE MORA PLAČILO POJAVITI NA NAŠEM RAČUNU PODJETJA Z NATANČNIM ZNESEKOM VAŠEGA NAROČILA, VSE BANČNE PRISTOJNOSTI MORAJO BITI POKRITE Z VAMI****";
+        $message = 'Spoštovani ' . $order->get_billing_first_name() . ",
+        $message .= 'Hvala za vaše naročilo v skupnem znesku ' . wc_price($order_total) . '. Sledite spodnjim navodilom, da zaključite plačilo z BACS:<br><br>';
+        $message .= '<ol>';
+        $message .= '<li>Prijavite se v svoj spletni bančni račun.</li>';
+        $message .= '<li>Izvedite plačilo na naslednji bančni račun:</li>';
+        $message .= '</ol>';
+        $message .= '<strong>Ime podjetja:</strong> TRAVELERS EMPORIKI IKE<br>';
+        $message .= '<strong>Številka računa:</strong> GR24 0172 1450 0051 4509 2301 393<br>';
+        $message .= '<strong>Koda za sortiranje:</strong> PIRBGRAA<br><br>';
+        $message .= 'Vključite številko naročila v razdelek za sklice.<br>';
+        $message .= 'Ko prejmemo vaše plačilo, bomo obdelali vaše naročilo in vam poslali e-poštno sporočilo o potrditvi pošiljanja.<br><br>';
+        $message .= '<strong>****PROSIMO, UPOŠTEVAJTE, DA SE MORA PLAČILO POJAVITI NA NAŠEM POSLOVNEM RAČUNU Z NATANČNIM ZNESEKOM VAŠEGA NAROČILA, VSE BANČNE STROŠKE MORAJO BITI POKRITE OD VAS****</strong>';
     break;
-    case 'sv':
-        $subject = 'BACS betalningsinstruktioner för beställning #' . $order->get_id();
-        $message = 'Kära ' . $order->get_billing_first_name() . ",
-
-Tack för din beställning med ett totalt belopp på " . wc_price($order_total) . ". Följ instruktionerna nedan för att slutföra din betalning med BACS:
-
-1. Logga in på ditt onlinebankkonto.
-2. Gör en betalning till följande bankkonto:
-
-Företagsnamn: $company_name
-Kontonummer: $account_number
-Sorteringskod: $sort_code
-
-Ange ditt beställningsnummer i referensavsnittet.
-
-När vi har mottagit din betalning kommer vi att behandla din beställning och skicka dig ett e-postmeddelande med bekräftelse på leverans.
-
-Tack för din beställning.
-****OBSERVERA ATT BETALNINGEN MÅSTE VISAS PÅ VÅR FÖRETAGSKONTO MED EXAKT BELOPP AV DIN BESTÄLLNING, ALLA BANKKOSTNADER MÅSTE VARA TÄCKT AV DIG****";
+    case 'cs':
+        $subject = 'BACS platební pokyny pro objednávku #' . $order->get_id();
+        $message = 'Vážený ' . $order->get_billing_first_name() . ",
+        $message .= 'Děkujeme za vaši objednávku v celkové výši ' . wc_price($order_total) . '. Postupujte podle níže uvedených pokynů, abyste dokončili platbu pomocí BACS:<br><br>';
+        $message .= '<ol>';
+        $message .= '<li>Přihlaste se do svého účtu v internetovém bankovnictví.</li>';
+        $message .= '<li>Proveďte platbu na následující bankovní účet:</li>';
+        $message .= '</ol>';
+        $message .= '<strong>Název společnosti:</strong> TRAVELERS EMPORIKI IKE<br>';
+        $message .= '<strong>Číslo účtu:</strong> GR24 0172 1450 0051 4509 2301 393<br>';
+        $message .= '<strong>Kód třídění:</strong> PIRBGRAA<br><br>';
+        $message .= 'Zadejte číslo objednávky do sekce reference.<br>';
+        $message .= 'Jakmile obdržíme vaši platbu, zpracujeme vaši objednávku a pošleme vám e-mail s potvrzením odeslání.<br><br>';
+        $message .= '<strong>****POZOR, PLATBA MUSÍ BÝT ZOBRAZENA NA NAŠEM FIREMNÍM ÚČTU S PŘESNÝM MNOŽSTVÍM VAŠE OBJEDNÁVKY, VŠECHNY BANKOVNÍ POPLATKY MUSÍ BÝT POKRYTY VÁMI****</strong>';
     break;
-    case 'es':
-        $subject = 'Instrucciones de pago BACS para el pedido #' . $order->get_id();
-        $message = 'Estimado ' . $order->get_billing_first_name() . ",
-
-Gracias por su pedido con un total de " . wc_price($order_total) . ". Siga las instrucciones a continuación para completar su pago con BACS:
-
-1. Inicie sesión en su cuenta bancaria en línea.
-2. Realice un pago a la siguiente cuenta bancaria:
-
-Nombre de la empresa: $company_name
-Número de cuenta: $account_number
-Código de clasificación: $sort_code
-
-Incluya el número de su pedido en la sección de referencia.
-
-Una vez que hayamos recibido su pago, procesaremos su pedido y le enviaremos un correo electrónico de confirmación de envío.
-
-Gracias por su pedido.
-****TENGA EN CUENTA QUE EL PAGO DEBE APARECER EN NUESTRA CUENTA DE EMPRESA CON EL MONTO EXACTO DE SU PEDIDO, CUALQUIER CARGO BANCARIO DEBE SER CUBIERTO POR USTED****";
+    case 'sk':
+        $subject = 'BACS platobné pokyny pre objednávku #' . $order->get_id();
+        $message = 'Vážený ' . $order->get_billing_first_name() . ",
+        $message .= 'Ďakujeme za vašu objednávku v celkovej výške ' . wc_price($order_total) . '. Postupujte podľa nižšie uvedených pokynov, aby ste dokončili platbu pomocou BACS:<br><br>';
+        $message .= '<ol>';
+        $message .= '<li>Prihláste sa do svojho účtu v internetovom bankovníctve.</li>';
+        $message .= '<li>Vykonajte platbu na nasledujúci bankový účet:</li>';
+        $message .= '</ol>';
+        $message .= '<strong>Názov spoločnosti:</strong> TRAVELERS EMPORIKI IKE<br>';
+        $message .= '<strong>Číslo účtu:</strong> GR24 0172 1450 0051 4509 2301 393<br>';
+        $message .= '<strong>Kód triedenia:</strong> PIRBGRAA<br><br>';
+        $message .= 'Zadajte číslo vašej objednávky do sekcie referencie.<br>';
+        $message .= 'Po obdržaní vašej platby spracujeme vašu objednávku a pošleme vám e-mail s potvrdením odoslania.<br><br>';
+        $message .= '<strong>****POZOR, PLATBA MUSÍ BYŤ ZOBRAZENÁ NA NAŠOM FIREMNOM ÚČTE S PRESNÝM MNOŽSTVOM VAŠEJ OBJEDNÁVKY, VŠETKY BANKOVÉ POPLATKY MUSIA BYŤ POKRYTÉ VAMI****</strong>';
     break;
+    case 'hu':
+        $subject = 'BACS fizetési utasítások a(z) #' . $order->get_id() . ' rendeléshez';
+        $message = 'Kedves ' . $order->get_billing_first_name() . ",
+        $message .= 'Köszönjük megrendelését, amelynek összege ' . wc_price($order_total) . '. Kérjük, kövesse az alábbi utasításokat a fizetés befejezéséhez a BACS használatával:<br><br>';
+        $message .= '<ol>';
+        $message .= '<li>Jelentkezzen be az online banki fiókjába.</li>';
+        $message .= '<li>Indítsa el a fizetést a következő bankszámlára:</li>';
+        $message .= '</ol>';
+        $message .= '<strong>Vállalat neve:</strong> TRAVELERS EMPORIKI IKE<br>';
+        $message .= '<strong>Bankszámlaszám:</strong> GR24 0172 1450 0051 4509 2301 393<br>';
+        $message .= '<strong>Sort Code:</strong> PIRBGRAA<br><br>';
+        $message .= 'Kérjük, adja meg a rendelési számát a hivatkozások részben.<br>';
+        $message .= 'Miután megkaptuk a fizetését, feldolgozzuk a rendelését, és e-mailben elküldjük Önnek a szállítási visszaigazolást.<br><br>';
+        $message .= '<strong>****KÉRJÜK, VEGYE FIGYELEMBE, HOGY A FIZETÉSNEK MEGJELENNIE KELL A CÉGES SZÁMLÁNKON A RENDELÉS PONTOS ÖSSZEGÉVEL, MINDEN BANKI DÍJAT ÖNNEK KELL FEDNIE****</strong>';
+    break;
+    case 'pl':
+        $subject = 'Instrukcje płatności BACS dla zamówienia #' . $order->get_id();
+        $message = 'Drogi ' . $order->get_billing_first_name() . ",
+        $message .= 'Dziękujemy za zamówienie na łączną kwotę ' . wc_price($order_total) . '. Prosimy postępować zgodnie z poniższymi instrukcjami, aby zakończyć płatność za pomocą BACS:<br><br>';
+        $message .= '<ol>';
+        $message .= '<li>Zaloguj się do swojego konta bankowego online.</li>';
+        $message .= '<li>Wykonaj płatność na następujące konto bankowe:</li>';
+        $message .= '</ol>';
+        $message .= '<strong>Nazwa firmy:</strong> TRAVELERS EMPORIKI IKE<br>';
+        $message .= '<strong>Numer konta:</strong> GR24 0172 1450 0051 4509 2301 393<br>';
+        $message .= '<strong>Kod sortowania:</strong> PIRBGRAA<br><br>';
+        $message .= 'Proszę wpisać numer zamówienia w sekcji odniesienia.<br>';
+        $message .= 'Po otrzymaniu płatności przetworzymy Twoje zamówienie i wyślemy Ci e-mail z potwierdzeniem wysyłki.<br><br>';
+        $message .= '<strong>****PROSZĘ ZAUWAŻYĆ, ŻE PŁATNOŚĆ MUSI POJAWIĆ SIĘ NA NASZYM KONCIE FIRMOWYM Z DOKŁADNĄ KWOTĄ TWOJEGO ZAMÓWIENIA, WSZYSTKIE OPŁATY BANKOWE MUSZĄ BYĆ POKRYTE PRZEZ CIEBIE****</strong>';
+    break;
+    case 'nl':
+        $subject = 'BACS-betalingsinstructies voor bestelling #' . $order->get_id();
+        $message = 'Beste ' . $order->get_billing_first_name() . ",
+        $message .= 'Bedankt voor uw bestelling met een totaal van ' . wc_price($order_total) . '. Volg de onderstaande instructies om uw betaling te voltooien met behulp van BACS:<br><br>';
+        $message .= '<ol>';
+        $message .= '<li>Log in op uw online bankrekening.</li>';
+        $message .= '<li>Voer een betaling uit naar de volgende bankrekening:</li>';
+        $message .= '</ol>';
+        $message .= '<strong>Bedrijfsnaam:</strong> TRAVELERS EMPORIKI IKE<br>';
+        $message .= '<strong>Rekeningnummer:</strong> GR24 0172 1450 0051 4509 2301 393<br>';
+        $message .= '<strong>Sorteercode:</strong> PIRBGRAA<br><br>';
+        $message .= 'Vermeld uw bestelnummer in het gedeelte met de referentie.<br>';
+        $message .= 'Zodra we uw betaling hebben ontvangen, verwerken we uw bestelling en sturen we u een e-mail met een verzendbevestiging.<br><br>';
+        $message .= '<strong>****LET OP, DE BETALING MOET VERSCHIJNEN OP ONZE BEDRIJFSREKENING MET HET EXACTE BEDRAG VAN UW BESTELLING, ALLE BANKKOSTEN MOETEN WORDEN GEDRAGEN DOOR U****</strong>';
+    break;
+    case 'ga':
+        $subject = 'Treoracha íocaíochta BACS don ordú #' . $order->get_id();
+        $message = 'A chara ' . $order->get_billing_first_name() . ",
+        $message .= 'Go raibh maith agat as do ordú le haghaidh iomlán ' . wc_price($order_total) . '. Déan na treoracha thíos a leanúint chun do íocaíocht a chríochnú ag baint úsáide as BACS:<br><br>';
+        $message .= '<ol>';
+        $message .= '<li>Logáil isteach i do chuntas bainc ar líne.</li>';
+        $message .= '<li>Déan íocaíocht ar an gcuntas bainc seo a leanas:</li>';
+        $message .= '</ol>';
+        $message .= '<strong>Ainm an chuideachta:</strong> TRAVELERS EMPORIKI IKE<br>';
+        $message .= '<strong>Aonad Cuntas:</strong> GR24 0172 1450 0051 4509 2301 393<br>';
+        $message .= '<strong>Cód Sórtála:</strong> PIRBGRAA<br><br>';
+        $message .= 'Cuir do chuid ordaithe san alt tagairt.<br>';
+        $message .= 'Nuair a fhaigheann muid do íocaíocht, próiseálfaimid do ordú agus seolfaimid r-phost duit le deimhniú seachadta.<br><br>';
+        $message .= '<strong>****TABHAIR FAOI DEARA, CAITHFIDH AN ÍOCAÍOCHT A BHEITH LE FEICEÁIL AR ÁR CUNTAS COMHLACHT LEIS AN MEASCTHAÍ ACHTÚ DO ORDÚ, CAITHFIDH GACH TÁILLÍ BAINC A BHEITH AGAT****</strong>';
+    break;
+    case 'lv':
+        $subject = 'BACS maksājuma instrukcijas pasūtījumam #' . $order->get_id();
+        $message = 'Dārgais ' . $order->get_billing_first_name() . ",
+        $message .= 'Paldies par jūsu pasūtījumu kopējā summa ' . wc_price($order_total) . '. Lūdzu, ievērojiet zemāk norādītās instrukcijas, lai pabeigtu maksājumu, izmantojot BACS:<br><br>';
+        $message .= '<ol>';
+        $message .= '<li>Pierakstieties savā tiešsaistes bankas kontā.</li>';
+        $message .= '<li>Veiciet maksājumu uz šādu bankas kontu:</li>';
+        $message .= '</ol>';
+        $message .= '<strong>Uzņēmuma nosaukums:</strong> TRAVELERS EMPORIKI IKE<br>';
+        $message .= '<strong>Konta numurs:</strong> GR24 0172 1450 0051 4509 2301 393<br>';
+        $message .= '<strong>Kārtošanas kods:</strong> PIRBGRAA<br><br>';
+        $message .= 'Norādiet savu pasūtījuma numuru atsauces sadaļā.<br>';
+        $message .= 'Saņemot jūsu maksājumu, mēs apstrādāsim jūsu pasūtījumu un nosūtīsim jums e-pasta paziņojumu par piegādi.<br><br>';
+        $message .= '<strong>****LŪDZAM, PIEVĒRSIET UZMANĪBU, KA MAKSĀJUMAM JĀPARĀDĀS MŪSU UZŅĒMUMA KONTĀ AR JŪSU PASŪTĪJUMA PRECĪZU SUMMU, VISAS BANKAS MAKSAS JĀBŪT JŪSU****</strong>';
+    break;
+    case 'lt':
+        $subject = 'BACS mokėjimo instrukcijos užsakymui #' . $order->get_id();
+        $message = 'Brangus ' . $order->get_billing_first_name() . ",
+        $message .= 'Dėkojame už jūsų užsakymą, kurio bendra suma ' . wc_price($order_total) . '. Norėdami užbaigti mokėjimą naudodami BACS, laikykitės žemiau pateiktų instrukcijų:<br><br>';
+        $message .= '<ol>';
+        $message .= '<li>Prisijunkite prie savo internetinės banko sąskaitos.</li>';
+        $message .= '<li>Atlikite mokėjimą į šią banko sąskaitą:</li>';
+        $message .= '</ol>';
+        $message .= '<strong>Įmonės pavadinimas:</strong> TRAVELERS EMPORIKI IKE<br>';
+        $message .= '<strong>Sąskaitos numeris:</strong> GR24 0172 1450 0051 4509 2301 393<br>';
+        $message .= '<strong>Rūšiavimo kodas:</strong> PIRBGRAA<br><br>';
+        $message .= 'Nurodykite savo užsakymo numerį nuorodų skyriuje.<br>';
+        $message .= 'Gavę mokėjimą, apdorosime jūsų užsakymą ir išsiųsime jums pristatymo patvirtinimo el. Laišką.<br><br>';
+        $message .= '<strong>****PASTABA, KAD MOKĖJIMAS TURI BŪTI RODOMAS MŪSŲ ĮMONĖS SĄSKAITOJE SU JŪSŲ UŽSAKYMO TIKSLIU KIEKIU, VISI BANKO MOKĖJIMAI TURI BŪTI PADENGIMI JUMS****</strong>';
+    break;
+                
         // Add more cases for other languages here
         default:
             // Default to English if the order language is not supported
             $subject = 'BACS payment instructions for order #' . $order->get_id();
-            $message = 'Dear ' . $order->get_billing_first_name() . ",
-
-Thank you for your order with a total of " . wc_price($order_total) . ". Please follow the instructions below to complete your payment using BACS:
-
-1. Log in to your online banking account.
-2. Make a payment to the following bank account:
-
-Company Name: $company_name
-Account Number: $account_number
-Sort Code: $sort_code
-
-Please include your order number in the reference section.
-
-Once we have received your payment, we will process your order and send you a shipping confirmation email.
-
-Thank you for your order.
-****PLEASE NOTE PAYMENT MUST APPEAR ON OUR COMPANY ACCOUNT WITH THE EXACT AMOUNT OF YOUR ORDER, ANY BANK CHARGES MUST BE COVERED BY YOU****";
+            $subject = 'BACS payment instructions for order #' . $order->get_id();
+        $message = 'Dear ' . $order->get_billing_first_name() . ",
+        $message .= 'Thank you for your order with a total of ' . wc_price($order_total) . '. Please follow the instructions below to complete your payment using BACS:<br><br>';
+        $message .= '<ol>';
+        $message .= '<li>Log in to your online banking account.</li>';
+        $message .= '<li>Make a payment to the following bank account:</li>';
+        $message .= '</ol>';
+        $message .= '<strong>Company Name:</strong> TRAVELERS EMPORIKI IKE<br>';
+        $message .= '<strong>Account Number:</strong> GR24 0172 1450 0051 4509 2301 393<br>';
+        $message .= '<strong>Sort Code:</strong> PIRBGRAA<br><br>';
+        $message .= 'Please include your order number in the reference section.<br>';
+        $message .= 'Once we have received your payment, we will process your order and send you a shipping confirmation email.<br><br>';
+        $message .= '<strong>****PLEASE NOTE PAYMENT MUST APPEAR ON OUR COMPANY ACCOUNT WITH THE EXACT AMOUNT OF YOUR ORDER, ANY BANK CHARGES MUST BE COVERED BY YOU****</strong>';
     }
 
     // Send the email
