@@ -390,4 +390,6 @@ function send_bacs_payment_email($order_id) {
 
     // Send the email
     wc_mail($order->get_billing_email(), $subject, $message);
+    // Add the note
+    $order->add_order_note('Email sent: ' . $message);
 }
