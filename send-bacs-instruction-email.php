@@ -14,49 +14,73 @@ function send_bacs_payment_email($order_id) {
 
     // Get the order language
     $lang = get_post_meta($order_id, 'lang', true);
+
+    // Get the billing country
+    $billing_country = $order->get_billing_country();
     
     // Bank Details
     $company_name = 'TRAVELERS EMPORIKI IKE';
     $account_number = 'GR24 0172 1450 0051 4509 2301 393';
     $sort_code = 'PIRBGRAA';
+    $order_total = $order->get_total();
+    $order_total = ($order_total) + 4.00; //Insert Bank Charge for all language except Greek
+    $order_total = number_format($order_total, 2, '.', '') . ' €'; //format it as a double and add the euro sign
     
     // Set the email subject and message based on the order language
     switch($lang) {
 	case 'el':
-        $subject = 'Οδηγίες πληρωμής BACS για παραγγελία #' . $order->get_id();
-        $message = '<strong>Αγαπητέ ' . $order->get_billing_first_name() . ',</strong><br><br>';
-        $message .= 'Σας ευχαριστούμε για την παραγγελία σας συνολικού ποσού ' . wc_price($order_total) . '.<br>';
-        $message .= 'Ακολουθήστε τις παρακάτω οδηγίες για να ολοκληρώσετε την πληρωμή σας χρησιμοποιώντας το BACS:<br><br>';
-        $message .= '<ol>';
-        $message .= '<li>Συνδεθείτε στο λογαριασμό σας στην τραπεζική σας τράπεζα.</li>';
-        $message .= '<li>Κάντε μια πληρωμή στον ακόλουθο τραπεζικό λογαριασμό:</li>';
-        $message .= '</ol>';
-        $message .= '<strong>Όνομα εταιρείας:</strong> <strong>' . $company_name . '</strong><br>';
-        $message .= '<strong>Αριθμός λογαριασμού:</strong> <strong>' . $account_number. '</strong><br>';
-        $message .= '<strong>Κωδικός ταξινόμησης:</strong> <strong>' . $sort_code. '</strong><br>';
-        $message .= 'Παρακαλούμε συμπεριλάβετε τον αριθμό παραγγελίας σας στην ενότητα αναφοράς.<br>';
-        $message .= 'Μόλις λάβουμε την πληρωμή σας, θα επεξεργαστούμε την παραγγελία σας και θα σας στείλουμε ένα email επιβεβαίωσης αποστολής.<br><br>';
-        $message .= '<strong>****ΠΑΡΑΚΑΛΩ ΣΗΜΕΙΩΣΤΕ ΟΤΙ Η ΠΛΗΡΩΜΗ ΠΡΕΠΕΙ ΝΑ ΕΜΦΑΝΙΣΤΕΙ ΣΤΟΝ ΛΟΓΑΡΙΑΣΜΟ ΤΗΣ ΕΤΑΙΡΕΙΑΣ ΜΑΣ ΜΕ ΤΟ ΑΚΡΙΒΕΣ ΠΟΣΟ ΤΗΣ ΠΑΡΑΓΓΕΛΙΑΣ ΣΑΣ, ΟΠΟΙΕΣ ΤΡΑΠΕΖΙΚΕΣ ΧΡΕΩΣΕΙΣ ΠΡΕΠΕΙ ΝΑ ΚΑΛΥΦΘΟΥΝ ΑΠΟ ΕΣΑΣ****</strong>';
+        if ($billing_country == 'GR'){
+            $subject = 'Οδηγίες πληρωμής BACS για παραγγελία #' . $order->get_id();
+            $message = '<strong>Αγαπητέ ' . $order->get_billing_first_name() . ',</strong><br><br>';
+            $message .= 'Σας ευχαριστούμε για την παραγγελία σας συνολικού ποσού ' . wc_price($order_total) . '.<br>';
+            $message .= 'Ακολουθήστε τις παρακάτω οδηγίες για να ολοκληρώσετε την πληρωμή σας χρησιμοποιώντας το BACS:<br><br>';
+            $message .= '<ol>';
+            $message .= '<li>Συνδεθείτε στο λογαριασμό σας στην τραπεζική σας τράπεζα.</li>';
+            $message .= '<li>Κάντε μια πληρωμή στον ακόλουθο τραπεζικό λογαριασμό:</li>';
+            $message .= '</ol>';
+            $message .= '<strong>Όνομα εταιρείας:</strong> <strong>' . $company_name . '</strong><br>';
+            $message .= '<strong>Αριθμός λογαριασμού:</strong> <strong>' . $account_number. '</strong><br>';
+            $message .= '<strong>Κωδικός ταξινόμησης:</strong> <strong>' . $sort_code. '</strong><br>';
+            $message .= 'Παρακαλούμε συμπεριλάβετε τον αριθμό παραγγελίας σας στην ενότητα αναφοράς.<br>';
+            $message .= 'Μόλις λάβουμε την πληρωμή σας, θα επεξεργαστούμε την παραγγελία σας και θα σας στείλουμε ένα email επιβεβαίωσης αποστολής.<br><br>';
+            $message .= '<strong>****ΠΑΡΑΚΑΛΩ ΣΗΜΕΙΩΣΤΕ ΟΤΙ Η ΠΛΗΡΩΜΗ ΠΡΕΠΕΙ ΝΑ ΕΜΦΑΝΙΣΤΕΙ ΣΤΟΝ ΛΟΓΑΡΙΑΣΜΟ ΤΗΣ ΕΤΑΙΡΕΙΑΣ ΜΑΣ ΜΕ ΤΟ ΑΚΡΙΒΕΣ ΠΟΣΟ ΤΗΣ ΠΑΡΑΓΓΕΛΙΑΣ ΣΑΣ, ΟΠΟΙΕΣ ΤΡΑΠΕΖΙΚΕΣ ΧΡΕΩΣΕΙΣ ΠΡΕΠΕΙ ΝΑ ΚΑΛΥΦΘΟΥΝ ΑΠΟ ΕΣΑΣ****</strong>';
+        }
+        else{
+            $subject = 'Οδηγίες πληρωμής BACS για παραγγελία #' . $order->get_id();
+            $message = '<strong>Αγαπητέ ' . $order->get_billing_first_name() . ',</strong><br><br>';
+            $message .= 'Σας ευχαριστούμε για την παραγγελία σας συνολικού ποσού ' . $order_total . '.<br>';
+            $message .= 'Ακολουθήστε τις παρακάτω οδηγίες για να ολοκληρώσετε την πληρωμή σας χρησιμοποιώντας το BACS:<br><br>';
+            $message .= '<ol>';
+            $message .= '<li>Συνδεθείτε στο λογαριασμό σας στην τραπεζική σας τράπεζα.</li>';
+            $message .= '<li>Κάντε μια πληρωμή στον ακόλουθο τραπεζικό λογαριασμό:</li>';
+            $message .= '</ol>';
+            $message .= '<strong>Όνομα εταιρείας:</strong> <strong>' . $company_name . '</strong><br>';
+            $message .= '<strong>Αριθμός λογαριασμού:</strong> <strong>' . $account_number. '</strong><br>';
+            $message .= '<strong>Κωδικός ταξινόμησης:</strong> <strong>' . $sort_code. '</strong><br>';
+            $message .= 'Παρακαλούμε συμπεριλάβετε τον αριθμό παραγγελίας σας στην ενότητα αναφοράς.<br>';
+            $message .= 'Μόλις λάβουμε την πληρωμή σας, θα επεξεργαστούμε την παραγγελία σας και θα σας στείλουμε ένα email επιβεβαίωσης αποστολής.<br><br>';
+            $message .= '<strong>****ΠΑΡΑΚΑΛΩ ΣΗΜΕΙΩΣΤΕ ΟΤΙ Η ΠΛΗΡΩΜΗ ΠΡΕΠΕΙ ΝΑ ΕΜΦΑΝΙΣΤΕΙ ΣΤΟΝ ΛΟΓΑΡΙΑΣΜΟ ΤΗΣ ΕΤΑΙΡΕΙΑΣ ΜΑΣ ΜΕ ΤΟ ΑΚΡΙΒΕΣ ΠΟΣΟ ΤΗΣ ΠΑΡΑΓΓΕΛΙΑΣ ΣΑΣ, ΟΠΟΙΕΣ ΤΡΑΠΕΖΙΚΕΣ ΧΡΕΩΣΕΙΣ ΠΡΕΠΕΙ ΝΑ ΚΑΛΥΦΘΟΥΝ ΑΠΟ ΕΣΑΣ****</strong>';
+        }
     break;
     case 'de':
-        $subject = 'BACS-Zahlungsanweisungen für Bestellung #' . $order->get_id();
-        $message = 'Sehr geehrte ' . $order->get_billing_first_name() . ',<br><br>';
-        $message .= 'Vielen Dank für Ihre Bestellung in Höhe von ' . wc_price($order_total) . '. Bitte befolgen Sie die folgenden Anweisungen, um Ihre Zahlung mit BACS abzuschließen:<br><br>';
-        $message .= '<ol>';
-        $message .= '<li>Melden Sie sich bei Ihrem Online-Banking-Konto an.</li>';
-        $message .= '<li>Tätigen Sie eine Zahlung auf das folgende Bankkonto:</li>';
-        $message .= '</ol>';
-        $message .= '<strong>Firmenname:</strong> <strong>' . $company_name . '</strong><br>';
-        $message .= '<strong>Kontonummer:</strong> <strong>' . $account_number. '</strong><br>';
-        $message .= '<strong>Sort Code:</strong> <strong>' . $sort_code. '</strong><br>';
-        $message .= 'Bitte geben Sie Ihre Bestellnummer im Referenzbereich an.<br>';
-        $message .= 'Sobald wir Ihre Zahlung erhalten haben, werden wir Ihre Bestellung bearbeiten und Ihnen eine Versandbestätigungs-E-Mail senden.<br><br>';
-        $message .= '<strong>****BITTE BEACHTEN SIE, DASS DIE ZAHLUNG AUF UNSEREM FIRMENKONTO MIT DEM EXAKTEN BETRAG IHRER BESTELLUNG ERSCHIENEN SEIN MUSS, ALLE BANKGEBÜHREN MÜSSEN VON IHNEN ABGEDECKT WERDEN****</strong>';
+            $subject = 'BACS-Zahlungsanweisungen für Bestellung #' . $order->get_id();
+            $message = 'Sehr geehrte ' . $order->get_billing_first_name() . ',<br><br>';
+            $message .= 'Vielen Dank für Ihre Bestellung in Höhe von ' .     $order_total . '. Bitte befolgen Sie die folgenden Anweisungen, um Ihre Zahlung mit BACS abzuschließen:<br><br>';
+            $message .= '<ol>';
+            $message .= '<li>Melden Sie sich bei Ihrem Online-Banking-Konto an.</li>';
+            $message .= '<li>Tätigen Sie eine Zahlung auf das folgende Bankkonto:</li>';
+            $message .= '</ol>';
+            $message .= '<strong>Firmenname:</strong> <strong>' . $company_name . '</strong><br>';
+            $message .= '<strong>Kontonummer:</strong> <strong>' . $account_number. '</strong><br>';
+            $message .= '<strong>Sort Code:</strong> <strong>' . $sort_code. '</strong><br>';
+            $message .= 'Bitte geben Sie Ihre Bestellnummer im Referenzbereich an.<br>';
+            $message .= 'Sobald wir Ihre Zahlung erhalten haben, werden wir Ihre Bestellung bearbeiten und Ihnen eine Versandbestätigungs-E-Mail senden.<br><br>';
+            $message .= '<strong>****BITTE BEACHTEN SIE, DASS DIE ZAHLUNG AUF UNSEREM FIRMENKONTO MIT DEM EXAKTEN BETRAG IHRER BESTELLUNG ERSCHIENEN SEIN MUSS, ALLE BANKGEBÜHREN MÜSSEN VON IHNEN ABGEDECKT WERDEN****</strong>';
     break;
     case 'fr':
         $subject = 'Instructions de paiement BACS pour la commande #' . $order->get_id();
         $message = 'Cher ' . $order->get_billing_first_name() . ',<br><br>';
-        $message .= 'Merci pour votre commande d\'un montant total de ' . wc_price($order_total) . '. Veuillez suivre les instructions ci-dessous pour effectuer votre paiement en utilisant BACS:<br><br>';
+        $message .= 'Merci pour votre commande d\'un montant total de ' .     $order_total . '. Veuillez suivre les instructions ci-dessous pour effectuer votre paiement en utilisant BACS:<br><br>';
         $message .= '<ol>';
         $message .= '<li>Connectez-vous à votre compte bancaire en ligne.</li>';
         $message .= '<li>Effectuez un paiement sur le compte bancaire suivant:</li>';
@@ -71,7 +95,7 @@ function send_bacs_payment_email($order_id) {
     case 'it':
         $subject = 'Istruzioni per il pagamento BACS per l\'ordine #' . $order->get_id();
         $message = 'Gentile ' . $order->get_billing_first_name() . ',<br><br>';
-        $message .= 'Grazie per il tuo ordine di un totale di ' . wc_price($order_total) . '. Seguire le istruzioni di seguito per completare il pagamento utilizzando BACS:<br><br>';
+        $message .= 'Grazie per il tuo ordine di un totale di ' .     $order_total . '. Seguire le istruzioni di seguito per completare il pagamento utilizzando BACS:<br><br>';
         $message .= '<ol>';
         $message .= '<li>Accedi al tuo account bancario online.</li>';
         $message .= '<li>Esegui un pagamento sul seguente conto bancario:</li>';
@@ -86,7 +110,7 @@ function send_bacs_payment_email($order_id) {
     case 'es':
         $subject = 'Instrucciones de pago de BACS para el pedido #' . $order->get_id();
         $message = 'Estimado ' . $order->get_billing_first_name() . ',<br><br>';
-        $message .= 'Gracias por su pedido por un total de ' . wc_price($order_total) . '. Siga las instrucciones a continuación para completar su pago utilizando BACS:<br><br>';
+        $message .= 'Gracias por su pedido por un total de ' .     $order_total . '. Siga las instrucciones a continuación para completar su pago utilizando BACS:<br><br>';
         $message .= '<ol>';
         $message .= '<li>Inicie sesión en su cuenta bancaria en línea.</li>';
         $message .= '<li>Haga un pago a la siguiente cuenta bancaria:</li>';
@@ -101,7 +125,7 @@ function send_bacs_payment_email($order_id) {
     case 'pt-pt':
         $subject = 'Instruções de pagamento BACS para o pedido #' . $order->get_id();
         $message = 'Caro ' . $order->get_billing_first_name() . ',<br><br>';
-        $message .= 'Obrigado pelo seu pedido no valor de ' . wc_price($order_total) . '. Siga as instruções abaixo para concluir seu pagamento usando BACS:<br><br>';
+        $message .= 'Obrigado pelo seu pedido no valor de ' .     $order_total . '. Siga as instruções abaixo para concluir seu pagamento usando BACS:<br><br>';
         $message .= '<ol>';
         $message .= '<li>Entre na sua conta bancária online.</li>';
         $message .= '<li>Faça um pagamento na seguinte conta bancária:</li>';
@@ -116,7 +140,7 @@ function send_bacs_payment_email($order_id) {
     case 'pt':
         $subject = 'Instruções de pagamento BACS para o pedido #' . $order->get_id();
         $message = 'Caro ' . $order->get_billing_first_name() . ',<br><br>';
-        $message .= 'Obrigado pelo seu pedido no valor de ' . wc_price($order_total) . '. Siga as instruções abaixo para concluir seu pagamento usando BACS:<br><br>';
+        $message .= 'Obrigado pelo seu pedido no valor de ' .     $order_total . '. Siga as instruções abaixo para concluir seu pagamento usando BACS:<br><br>';
         $message .= '<ol>';
         $message .= '<li>Entre na sua conta bancária online.</li>';
         $message .= '<li>Faça um pagamento na seguinte conta bancária:</li>';
@@ -131,7 +155,7 @@ function send_bacs_payment_email($order_id) {
     case 'en':
         $subject = 'BACS payment instructions for order #' . $order->get_id();
         $message = 'Dear ' . $order->get_billing_first_name() . ',<br><br>';
-        $message .= 'Thank you for your order with a total of ' . wc_price($order_total) . '. Please follow the instructions below to complete your payment using BACS:<br><br>';
+        $message .= 'Thank you for your order with a total of ' .     $order_total . '. Please follow the instructions below to complete your payment using BACS:<br><br>';
         $message .= '<ol>';
         $message .= '<li>Log in to your online banking account.</li>';
         $message .= '<li>Make a payment to the following bank account:</li>';
@@ -146,7 +170,7 @@ function send_bacs_payment_email($order_id) {
     case 'et':
         $subject = 'BACS maksejuhised tellimuse #' . $order->get_id();
         $message = 'Kallis ' . $order->get_billing_first_name() . ',<br><br>';
-        $message .= 'Täname teid tellimuse eest kogusummas ' . wc_price($order_total) . '. Järgige allpool toodud juhiseid BACS-i kasutades makse lõpuleviimiseks:<br><br>';
+        $message .= 'Täname teid tellimuse eest kogusummas ' .     $order_total . '. Järgige allpool toodud juhiseid BACS-i kasutades makse lõpuleviimiseks:<br><br>';
         $message .= '<ol>';
         $message .= '<li>Logige sisse oma pangakonto.</li>';
         $message .= '<li>Tehke makse järgmisele pangakontole:</li>';
@@ -161,7 +185,7 @@ function send_bacs_payment_email($order_id) {
     case 'fi':
         $subject = 'BACS-maksuohjeet tilaukselle #' . $order->get_id();
         $message = 'Hyvä ' . $order->get_billing_first_name() . ',<br><br>';
-        $message .= 'Kiitos tilauksestasi yhteensä ' . wc_price($order_total) . '. Noudata alla olevia ohjeita suorittaaksesi maksun BACS: n avulla:<br><br>';
+        $message .= 'Kiitos tilauksestasi yhteensä ' .     $order_total . '. Noudata alla olevia ohjeita suorittaaksesi maksun BACS: n avulla:<br><br>';
         $message .= '<ol>';
         $message .= '<li>Kirjaudu sisään verkkopankkitilillesi.</li>';
         $message .= '<li>Suorita maksu seuraavalle pankkitilille:</li>';
@@ -176,7 +200,7 @@ function send_bacs_payment_email($order_id) {
     case 'sv':
         $subject = 'BACS-betalningsinstruktioner för beställning #' . $order->get_id();
         $message = 'Kära ' . $order->get_billing_first_name() . ',<br><br>';
-        $message .= 'Tack för din beställning till ett totalt belopp av ' . wc_price($order_total) . '. Följ instruktionerna nedan för att slutföra din betalning med BACS:<br><br>';
+        $message .= 'Tack för din beställning till ett totalt belopp av ' .     $order_total . '. Följ instruktionerna nedan för att slutföra din betalning med BACS:<br><br>';
         $message .= '<ol>';
         $message .= '<li>Logga in på ditt onlinebankkonto.</li>';
         $message .= '<li>Gör en betalning till följande bankkonto:</li>';
@@ -191,7 +215,7 @@ function send_bacs_payment_email($order_id) {
     case 'bg':
         $subject = 'Инструкции за плащане с BACS за поръчка #' . $order->get_id();
         $message = 'Уважаеми ' . $order->get_billing_first_name() . ',<br><br>';
-        $message .= 'Благодарим ви за поръчката ви на обща стойност ' . wc_price($order_total) . '. Моля, следвайте инструкциите по-долу, за да завършите плащането си с BACS:<br><br>';
+        $message .= 'Благодарим ви за поръчката ви на обща стойност ' .     $order_total . '. Моля, следвайте инструкциите по-долу, за да завършите плащането си с BACS:<br><br>';
         $message .= '<ol>';
         $message .= '<li>Влезте в онлайн банковата си сметка.</li>';
         $message .= '<li>Направете плащане на следната банкова сметка:</li>';
@@ -206,7 +230,7 @@ function send_bacs_payment_email($order_id) {
     case 'ro':
         $subject = 'Instrucțiuni de plată BACS pentru comanda #' . $order->get_id();
         $message = 'Dragă ' . $order->get_billing_first_name() . ',<br><br>';
-        $message .= 'Vă mulțumim pentru comanda dvs. în valoare totală de ' . wc_price($order_total) . '. Vă rugăm să urmați instrucțiunile de mai jos pentru a vă finaliza plata folosind BACS:<br><br>';
+        $message .= 'Vă mulțumim pentru comanda dvs. în valoare totală de ' .     $order_total . '. Vă rugăm să urmați instrucțiunile de mai jos pentru a vă finaliza plata folosind BACS:<br><br>';
         $message .= '<ol>';
         $message .= '<li>Conectați-vă la contul dvs. bancar online.</li>';
         $message .= '<li>Faceți o plată în contul bancar următor:</li>';
@@ -221,7 +245,7 @@ function send_bacs_payment_email($order_id) {
     case 'hr':
         $subject = 'BACS upute za plaćanje za narudžbu #' . $order->get_id();
         $message = 'Dragi ' . $order->get_billing_first_name() . ',<br><br>';
-        $message .= 'Hvala vam na narudžbi u iznosu od ' . wc_price($order_total) . '. Slijedite upute u nastavku kako biste dovršili svoju uplatu putem BACS-a:<br><br>';
+        $message .= 'Hvala vam na narudžbi u iznosu od ' .     $order_total . '. Slijedite upute u nastavku kako biste dovršili svoju uplatu putem BACS-a:<br><br>';
         $message .= '<ol>';
         $message .= '<li>Prijavite se na svoj online bankovni račun.</li>';
         $message .= '<li>Izvršite uplatu na sljedeći bankovni račun:</li>';
@@ -236,7 +260,7 @@ function send_bacs_payment_email($order_id) {
     case 'sl':
         $subject = 'Navodila za plačilo BACS za naročilo #' . $order->get_id();
         $message = 'Spoštovani ' . $order->get_billing_first_name() . ',<br><br>';
-        $message .= 'Hvala za vaše naročilo v skupnem znesku ' . wc_price($order_total) . '. Sledite spodnjim navodilom, da zaključite plačilo z BACS:<br><br>';
+        $message .= 'Hvala za vaše naročilo v skupnem znesku ' .     $order_total . '. Sledite spodnjim navodilom, da zaključite plačilo z BACS:<br><br>';
         $message .= '<ol>';
         $message .= '<li>Prijavite se v svoj spletni bančni račun.</li>';
         $message .= '<li>Izvedite plačilo na naslednji bančni račun:</li>';
@@ -251,7 +275,7 @@ function send_bacs_payment_email($order_id) {
     case 'cs':
         $subject = 'BACS platební pokyny pro objednávku #' . $order->get_id();
         $message = 'Vážený ' . $order->get_billing_first_name() . ',<br><br>';
-        $message .= 'Děkujeme za vaši objednávku v celkové výši ' . wc_price($order_total) . '. Postupujte podle níže uvedených pokynů, abyste dokončili platbu pomocí BACS:<br><br>';
+        $message .= 'Děkujeme za vaši objednávku v celkové výši ' .     $order_total . '. Postupujte podle níže uvedených pokynů, abyste dokončili platbu pomocí BACS:<br><br>';
         $message .= '<ol>';
         $message .= '<li>Přihlaste se do svého účtu v internetovém bankovnictví.</li>';
         $message .= '<li>Proveďte platbu na následující bankovní účet:</li>';
@@ -266,7 +290,7 @@ function send_bacs_payment_email($order_id) {
     case 'sk':
         $subject = 'BACS platobné pokyny pre objednávku #' . $order->get_id();
         $message = 'Vážený ' . $order->get_billing_first_name() . ',<br><br>';
-        $message .= 'Ďakujeme za vašu objednávku v celkovej výške ' . wc_price($order_total) . '. Postupujte podľa nižšie uvedených pokynov, aby ste dokončili platbu pomocou BACS:<br><br>';
+        $message .= 'Ďakujeme za vašu objednávku v celkovej výške ' .     $order_total . '. Postupujte podľa nižšie uvedených pokynov, aby ste dokončili platbu pomocou BACS:<br><br>';
         $message .= '<ol>';
         $message .= '<li>Prihláste sa do svojho účtu v internetovom bankovníctve.</li>';
         $message .= '<li>Vykonajte platbu na nasledujúci bankový účet:</li>';
@@ -281,7 +305,7 @@ function send_bacs_payment_email($order_id) {
     case 'hu':
         $subject = 'BACS fizetési utasítások a(z) #' . $order->get_id() . ' rendeléshez';
         $message = 'Kedves ' . $order->get_billing_first_name() . ',<br><br>';
-        $message .= 'Köszönjük megrendelését, amelynek összege ' . wc_price($order_total) . '. Kérjük, kövesse az alábbi utasításokat a fizetés befejezéséhez a BACS használatával:<br><br>';
+        $message .= 'Köszönjük megrendelését, amelynek összege ' .     $order_total . '. Kérjük, kövesse az alábbi utasításokat a fizetés befejezéséhez a BACS használatával:<br><br>';
         $message .= '<ol>';
         $message .= '<li>Jelentkezzen be az online banki fiókjába.</li>';
         $message .= '<li>Indítsa el a fizetést a következő bankszámlára:</li>';
@@ -296,7 +320,7 @@ function send_bacs_payment_email($order_id) {
     case 'pl':
         $subject = 'Instrukcje płatności BACS dla zamówienia #' . $order->get_id();
         $message = 'Drogi ' . $order->get_billing_first_name() . ',<br><br>';
-        $message .= 'Dziękujemy za zamówienie na łączną kwotę ' . wc_price($order_total) . '. Prosimy postępować zgodnie z poniższymi instrukcjami, aby zakończyć płatność za pomocą BACS:<br><br>';
+        $message .= 'Dziękujemy za zamówienie na łączną kwotę ' .     $order_total . '. Prosimy postępować zgodnie z poniższymi instrukcjami, aby zakończyć płatność za pomocą BACS:<br><br>';
         $message .= '<ol>';
         $message .= '<li>Zaloguj się do swojego konta bankowego online.</li>';
         $message .= '<li>Wykonaj płatność na następujące konto bankowe:</li>';
@@ -311,7 +335,7 @@ function send_bacs_payment_email($order_id) {
     case 'nl':
         $subject = 'BACS-betalingsinstructies voor bestelling #' . $order->get_id();
         $message = 'Beste ' . $order->get_billing_first_name() . ',<br><br>';
-        $message .= 'Bedankt voor uw bestelling met een totaal van ' . wc_price($order_total) . '. Volg de onderstaande instructies om uw betaling te voltooien met behulp van BACS:<br><br>';
+        $message .= 'Bedankt voor uw bestelling met een totaal van ' .     $order_total . '. Volg de onderstaande instructies om uw betaling te voltooien met behulp van BACS:<br><br>';
         $message .= '<ol>';
         $message .= '<li>Log in op uw online bankrekening.</li>';
         $message .= '<li>Voer een betaling uit naar de volgende bankrekening:</li>';
@@ -326,7 +350,7 @@ function send_bacs_payment_email($order_id) {
     case 'ga':
         $subject = 'Treoracha íocaíochta BACS don ordú #' . $order->get_id();
         $message = 'A chara ' . $order->get_billing_first_name() . ',<br><br>';
-        $message .= 'Go raibh maith agat as do ordú le haghaidh iomlán ' . wc_price($order_total) . '. Déan na treoracha thíos a leanúint chun do íocaíocht a chríochnú ag baint úsáide as BACS:<br><br>';
+        $message .= 'Go raibh maith agat as do ordú le haghaidh iomlán ' .     $order_total . '. Déan na treoracha thíos a leanúint chun do íocaíocht a chríochnú ag baint úsáide as BACS:<br><br>';
         $message .= '<ol>';
         $message .= '<li>Logáil isteach i do chuntas bainc ar líne.</li>';
         $message .= '<li>Déan íocaíocht ar an gcuntas bainc seo a leanas:</li>';
@@ -341,7 +365,7 @@ function send_bacs_payment_email($order_id) {
     case 'lv':
         $subject = 'BACS maksājuma instrukcijas pasūtījumam #' . $order->get_id();
         $message = 'Dārgais ' . $order->get_billing_first_name() . ',<br><br>';
-        $message .= 'Paldies par jūsu pasūtījumu kopējā summa ' . wc_price($order_total) . '. Lūdzu, ievērojiet zemāk norādītās instrukcijas, lai pabeigtu maksājumu, izmantojot BACS:<br><br>';
+        $message .= 'Paldies par jūsu pasūtījumu kopējā summa ' .     $order_total . '. Lūdzu, ievērojiet zemāk norādītās instrukcijas, lai pabeigtu maksājumu, izmantojot BACS:<br><br>';
         $message .= '<ol>';
         $message .= '<li>Pierakstieties savā tiešsaistes bankas kontā.</li>';
         $message .= '<li>Veiciet maksājumu uz šādu bankas kontu:</li>';
@@ -356,7 +380,7 @@ function send_bacs_payment_email($order_id) {
     case 'lt':
         $subject = 'BACS mokėjimo instrukcijos užsakymui #' . $order->get_id();
         $message = 'Brangus ' . $order->get_billing_first_name() . ',<br><br>';
-        $message .= 'Dėkojame už jūsų užsakymą, kurio bendra suma ' . wc_price($order_total) . '. Norėdami užbaigti mokėjimą naudodami BACS, laikykitės žemiau pateiktų instrukcijų:<br><br>';
+        $message .= 'Dėkojame už jūsų užsakymą, kurio bendra suma ' .     $order_total . '. Norėdami užbaigti mokėjimą naudodami BACS, laikykitės žemiau pateiktų instrukcijų:<br><br>';
         $message .= '<ol>';
         $message .= '<li>Prisijunkite prie savo internetinės banko sąskaitos.</li>';
         $message .= '<li>Atlikite mokėjimą į šią banko sąskaitą:</li>';
@@ -372,20 +396,38 @@ function send_bacs_payment_email($order_id) {
         // Add more cases for other languages here
         default:
             // Default to English if the order language is not supported
+        if ($billing_country == 'GR'){
             $subject = 'BACS payment instructions for order #' . $order->get_id();
             $subject = 'BACS payment instructions for order #' . $order->get_id();
-        $message = 'Dear ' . $order->get_billing_first_name() . ',<br><br>';
-        $message .= 'Thank you for your order with a total of ' . wc_price($order_total) . '. Please follow the instructions below to complete your payment using BACS:<br><br>';
-        $message .= '<ol>';
-        $message .= '<li>Log in to your online banking account.</li>';
-        $message .= '<li>Make a payment to the following bank account:</li>';
-        $message .= '</ol>';
-        $message .= '<strong>Company Name:</strong> <strong>' . $company_name . '</strong><br>';
-        $message .= '<strong>Account Number:</strong> <strong>' . $account_number. '</strong><br>';
-        $message .= '<strong>Sort Code:</strong> <strong>' . $sort_code. '</strong><br>';
-        $message .= 'Please include your order number in the reference section.<br>';
-        $message .= 'Once we have received your payment, we will process your order and send you a shipping confirmation email.<br><br>';
-        $message .= '<strong>****PLEASE NOTE PAYMENT MUST APPEAR ON OUR COMPANY ACCOUNT WITH THE EXACT AMOUNT OF YOUR ORDER, ANY BANK CHARGES MUST BE COVERED BY YOU****</strong>';
+            $message = 'Dear ' . $order->get_billing_first_name() . ',<br><br>';
+            $message .= 'Thank you for your order with a total of ' .     wc_price($order_total) . '. Please follow the instructions below to complete your payment using BACS:<br><br>';
+            $message .= '<ol>';
+            $message .= '<li>Log in to your online banking account.</li>';
+            $message .= '<li>Make a payment to the following bank account:</li>';
+            $message .= '</ol>';
+            $message .= '<strong>Company Name:</strong> <strong>' . $company_name . '</strong><br>';
+            $message .= '<strong>Account Number:</strong> <strong>' . $account_number. '</strong><br>';
+            $message .= '<strong>Sort Code:</strong> <strong>' . $sort_code. '</strong><br>';
+            $message .= 'Please include your order number in the reference section.<br>';
+            $message .= 'Once we have received your payment, we will process your order and send you a shipping confirmation email.<br><br>';
+            $message .= '<strong>****PLEASE NOTE PAYMENT MUST APPEAR ON OUR COMPANY ACCOUNT WITH THE EXACT AMOUNT OF YOUR ORDER, ANY BANK CHARGES MUST BE COVERED BY YOU****</strong>';
+        }
+        else{
+            $subject = 'BACS payment instructions for order #' . $order->get_id();
+            $subject = 'BACS payment instructions for order #' . $order->get_id();
+            $message = 'Dear ' . $order->get_billing_first_name() . ',<br><br>';
+            $message .= 'Thank you for your order with a total of ' .     $order_total . '. Please follow the instructions below to complete your payment using BACS:<br><br>';
+            $message .= '<ol>';
+            $message .= '<li>Log in to your online banking account.</li>';
+            $message .= '<li>Make a payment to the following bank account:</li>';
+            $message .= '</ol>';
+            $message .= '<strong>Company Name:</strong> <strong>' . $company_name . '</strong><br>';
+            $message .= '<strong>Account Number:</strong> <strong>' . $account_number. '</strong><br>';
+            $message .= '<strong>Sort Code:</strong> <strong>' . $sort_code. '</strong><br>';
+            $message .= 'Please include your order number in the reference section.<br>';
+            $message .= 'Once we have received your payment, we will process your order and send you a shipping confirmation email.<br><br>';
+            $message .= '<strong>****PLEASE NOTE PAYMENT MUST APPEAR ON OUR COMPANY ACCOUNT WITH THE EXACT AMOUNT OF YOUR ORDER, ANY BANK CHARGES MUST BE COVERED BY YOU****</strong>';
+        }
     }
 
     // Send the email
