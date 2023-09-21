@@ -27,6 +27,7 @@ function send_bacs_payment_email($order_id) {
     $order_total = number_format($order_total, 2, '.', '') . ' €'; //format it as a double and add the euro sign
     
     // Set the email subject and message based on the order language
+    //TESTING
     switch($lang) {
 	case 'el':
         if ($billing_country == 'GR'){
